@@ -10,23 +10,24 @@ import java.util.List;
  * Date on 2021/4/21  14:57
  */
 public class StudentSystemFrame extends JFrame {
-    public static List<Student> students;
-    public static TextArea textArea = new TextArea();
-    public static JPanel buttons = new JPanel();
-    public static JPanel subjectButtons = new JPanel();
-    public static JPanel sortChoiceButtons = new JPanel();
-    public static JPanel ascChoiceButtons = new JPanel();
-    public static JPanel confirmPanel = new JPanel();
-    public static int asc ;
-    public static int sortChoice ;
-    public static int subject ;
-    public static Box stuTextBox = Box.createVerticalBox();
-    public static JTextField stuIdTextField=new JTextField(20);
-    public static JTextField stuNameTextField=new JTextField(20);
-    public static JTextField stuAgeTextField=new JTextField(20);
-    public static JTextField mathScoreTextField=new JTextField(20);
-    public static JTextField englishScoreTextField=new JTextField(20);
-    public static JTextField computerScoreTextField=new JTextField(20);
+    private static List<Student> students;
+    private static TextArea textArea = new TextArea();
+    private static JPanel buttons = new JPanel();
+    private static JPanel listButtons = new JPanel();
+    private static JPanel subjectButtons = new JPanel();
+    private static JPanel sortChoiceButtons = new JPanel();
+    private static JPanel ascChoiceButtons = new JPanel();
+    private static JPanel confirmPanel = new JPanel();
+    private static int asc ;
+    private static int sortChoice ;
+    private static int subject ;
+    private static Box stuTextBox = Box.createVerticalBox();
+    private static JTextField stuIdTextField=new JTextField(20);
+    private static JTextField stuNameTextField=new JTextField(20);
+    private static JTextField stuAgeTextField=new JTextField(20);
+    private static JTextField mathScoreTextField=new JTextField(20);
+    private static JTextField englishScoreTextField=new JTextField(20);
+    private static JTextField computerScoreTextField=new JTextField(20);
     StudentSystemFrame(){
         super("学生信息系统");
         Container content = getContentPane();
@@ -36,6 +37,7 @@ public class StudentSystemFrame extends JFrame {
         JTextField textField = new JTextField();
         Font courierNew = new Font("Courier New", Font.BOLD, 20);
         textField.setFont(courierNew);
+        textArea.setFont(courierNew);
         stuIdTextField.setFont(courierNew);
         stuNameTextField.setFont(courierNew);
         stuAgeTextField.setFont(courierNew);
@@ -47,6 +49,7 @@ public class StudentSystemFrame extends JFrame {
         //按钮区域
 
         buttons.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); //设置样式
+        listButtons.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); //设置样式
         subjectButtons.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); //设置样式
         sortChoiceButtons.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); //设置样式
         ascChoiceButtons.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); //设置样式
@@ -55,6 +58,7 @@ public class StudentSystemFrame extends JFrame {
         //North区域
         Box topBox = Box.createVerticalBox();
         topBox.add(textField);
+        topBox.add(listButtons);
         topBox.add(buttons);
         topBox.add(sortChoiceButtons);
         sortChoiceButtons.setVisible(false);
@@ -88,6 +92,10 @@ public class StudentSystemFrame extends JFrame {
          */
         //初始化学生列表
         readFromText();
+
+        /**
+         * 查询
+         */
         JButton btn1 = new JButton("查询所有");
         btn1.addActionListener(new ActionListener() {
             @Override
@@ -98,7 +106,7 @@ public class StudentSystemFrame extends JFrame {
                 }
             }
         });
-        buttons.add(btn1);
+        listButtons.add(btn1);
 
         JButton btn2 = new JButton("按学号查询");
         btn2.addActionListener(new ActionListener() {
@@ -133,6 +141,68 @@ public class StudentSystemFrame extends JFrame {
             }
         });
         buttons.add(btn4);
+
+
+
+        /**
+         * 查询所有学号
+         */
+        JButton idButton = new JButton("学号列表");
+        idButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Set<Integer> idSet = new HashSet<>();
+                for(Student student:students){
+                    idSet.add(student.id);
+                }
+
+                textArea.setText(""); //清空
+                textArea.append("学号"+"\n");
+                for(int id:idSet){
+                    textArea.append(id+"\n");
+                }
+            }
+        });
+        listButtons.add(idButton);
+
+        /**
+         * 查询所有姓名
+         */
+        JButton nameButton = new JButton("姓名列表");
+        nameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Set<String> nameSet = new HashSet<>();
+                for(Student student:students){
+                    nameSet.add(student.name);
+                }
+
+                textArea.setText(""); //清空
+                textArea.append("姓名"+"\n");
+                for(String name:nameSet){
+                    textArea.append(name+"\n");
+                }
+            }
+        });
+        listButtons.add(nameButton);
+
+        JButton ageButton = new JButton("年龄列表");
+        ageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Set<Integer> ageSet = new HashSet<>();
+                for(Student student:students){
+                    ageSet.add(student.age);
+                }
+
+                textArea.setText(""); //清空
+                textArea.append("年龄"+"\n");
+                for(int age:ageSet){
+                    textArea.append(age+"\n");
+                }
+            }
+        });
+        listButtons.add(ageButton);
 
         /**
          * 排序功能
@@ -174,11 +244,30 @@ public class StudentSystemFrame extends JFrame {
             }
         });
         buttons.add(addButton);
+
+        /**
+         * 返回按钮
+         */
+        JButton returnButton = new JButton("返回");
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.setText("");
+                textArea.setText("");
+                subjectButtons.setVisible(false);
+                sortChoiceButtons.setVisible(false);
+                ascChoiceButtons.setVisible(false);
+                confirmPanel.setVisible(false);
+                stuTextBox.setVisible(false);
+            }
+        });
+        buttons.add(returnButton);
+
+
         JButton addConfirmButton = new JButton("确认添加");
         addConfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO
                 int id = Integer.parseInt(stuIdTextField.getText());
                 String name = stuNameTextField.getText();
                 int age = Integer.parseInt(stuAgeTextField.getText());
@@ -241,7 +330,7 @@ public class StudentSystemFrame extends JFrame {
         stuTextBox.setVisible(false);
     }
 
-    public void addStudentInfo(int stuId,String stuName,int stuAge,int mathScore,int englishScore,int computerScore){
+    private void addStudentInfo(int stuId,String stuName,int stuAge,int mathScore,int englishScore,int computerScore){
         //将输入的学生信息封装为学生对象
         Student newStudent = new Student(stuId,stuName,stuAge,mathScore,englishScore,computerScore);
         //将该对象转化为String写入到txt文件中
@@ -250,7 +339,7 @@ public class StudentSystemFrame extends JFrame {
         readFromText();
     }
 
-    public void showInfo(){
+    private void showInfo(){
         textArea.setText("");
         for(Student student:students){
             textArea.append(student.disp()+"\n");
@@ -467,7 +556,7 @@ public class StudentSystemFrame extends JFrame {
     public static void main(String[] args) {
         Toolkit toolkit = studentSystemFrame.getToolkit();
         Dimension screenSize = toolkit.getScreenSize();
-        studentSystemFrame.setBounds(screenSize.width/4,screenSize.height/4,screenSize.width/2,screenSize.height/2);
+        studentSystemFrame.setBounds(screenSize.width/4,screenSize.height/4,2*screenSize.width/3,2*screenSize.height/3);
         studentSystemFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         studentSystemFrame.setVisible(true);
     }
