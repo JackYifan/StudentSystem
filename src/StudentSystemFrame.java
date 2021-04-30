@@ -151,7 +151,7 @@ public class StudentSystemFrame extends JFrame {
         idButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Set<Integer> idSet = new HashSet<>();
+                Set<Integer> idSet = new TreeSet<>();
                 for(Student student:students){
                     idSet.add(student.id);
                 }
@@ -172,7 +172,7 @@ public class StudentSystemFrame extends JFrame {
         nameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Set<String> nameSet = new HashSet<>();
+                Set<String> nameSet = new TreeSet<>();
                 for(Student student:students){
                     nameSet.add(student.name);
                 }
@@ -190,7 +190,7 @@ public class StudentSystemFrame extends JFrame {
         ageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Set<Integer> ageSet = new HashSet<>();
+                Set<Integer> ageSet = new TreeSet<>();
                 for(Student student:students){
                     ageSet.add(student.age);
                 }
@@ -481,7 +481,7 @@ public class StudentSystemFrame extends JFrame {
 
     private static void selectById(Integer id) {
         for(Student student:students){
-            if(student.id==id){
+            if(student.id.equals(id)){
                 textArea.append(student.disp()+"\n");
             }
         }
